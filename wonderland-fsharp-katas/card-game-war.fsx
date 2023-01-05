@@ -15,6 +15,23 @@ type Rank =
     | King
     | Ace
 
+let getRankValue (r:Rank) = 
+    match r with
+    | Value v -> v
+    | Jack -> 11
+    | Queen -> 12
+    | King -> 13
+    | Ace -> 14
+
+let compareRank(rA:Rank,rB:Rank) =
+    if getRankValue rA > getRankValue rB then 
+        rA
+    else 
+        rB
+
+
+
+
 type Card = Suit * Rank
 
 let playRound (card1:Card,card2:Card) =
@@ -37,11 +54,45 @@ let deck = seq {
         for rank in ranks -> suit,rank }
 *)
 
+
+
 // fill in tests for your game
 let tests () =
 
     // playRound
     printfn "TODO: the highest rank wins the cards in the round"
+    let winningCard (cardA:Card, cardB:Card) =
+        let (sA,rA) = cardA
+        let (sB,rB) = cardB
+        compareRank(rA, rB)
+        match rA, rB with
+        | a,b when a > b ->
+            cardA
+        | a,b when a < b ->
+            cardB
+        | _ ->
+            match sA,sB with
+            | (Spade, _) ->
+                cardB
+            | (_, Heart) ->
+                cardB
+            | (Diamond, Club) ->
+                cardA
+            | (Club, Diamond) ->
+                cardB
+            | (_, Spade) ->
+                cardA
+            | (Heart, _) ->
+                cardA
+            | (Diamond, Diamond) 
+            | (Club, Club) 
+            | (Spade, Spade)
+            | (Heart, Heart) ->
+                failwith "madness, someone's cheating!"
+
+            
+
+
     printfn "TODO: queens are higher rank than jacks"
     printfn "TODO: kings are higher rank than queens"
     printfn "TODO: aces are higher rank than kings"
